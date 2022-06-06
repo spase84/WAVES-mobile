@@ -5,14 +5,21 @@ import 'package:market/models/pair_data.dart';
 class AppState {
   final bool isLoading;
   final List<PairData> pairList;
+  final PairData? pairDataDetails;
   // final AppTab activeTab;
 
-  const AppState({this.isLoading = false, this.pairList = const []});
+  const AppState(
+      {this.isLoading = false, this.pairList = const [], this.pairDataDetails});
 
   factory AppState.loading() => const AppState(isLoading: true);
 
   AppState copyWith(
-      {required bool isLoading, required List<PairData> pairList}) {
-    return AppState(isLoading: isLoading, pairList: pairList);
+      {required bool isLoading,
+      required List<PairData> pairList,
+      PairData? pairDataDetails}) {
+    return AppState(
+        isLoading: isLoading,
+        pairList: pairList,
+        pairDataDetails: pairDataDetails);
   }
 }

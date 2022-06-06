@@ -6,17 +6,18 @@ import 'package:market/redux/app_state.dart';
 import 'package:market/resources/text_styles.dart';
 import 'package:market/widgets/cards/pair_card.dart';
 import 'package:redux/redux.dart';
+import 'package:routemaster/routemaster.dart';
 
-class HomeScreen extends StatefulWidget {
+class PairsScreen extends StatefulWidget {
   final void Function() onInit;
 
-  const HomeScreen({Key? key, required this.onInit}) : super(key: key);
+  const PairsScreen({Key? key, required this.onInit}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<PairsScreen> createState() => _PairsScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _PairsScreenState extends State<PairsScreen> {
   @override
   initState() {
     widget.onInit();
@@ -40,7 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
             return ListView.builder(
                 itemCount: vm.pairs.length,
                 itemBuilder: (context, index) {
-                  return PairCard(pair: vm.pairs[index]);
+                  final pairData = vm.pairs[index];
+                  return PairCard(
+                    pair: pairData,
+                    onTap: () {
+                      Routemaster.of(context).push(
+                          '/pair/detail/${pairData.amountAsset}/${pairData.priceAsset}');
+                    },
+                  );
                 });
           },
           converter: _ViewModel.fromStore),

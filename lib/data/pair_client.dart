@@ -7,7 +7,6 @@ import 'package:market/settings.dart';
 
 class PairClient extends http.BaseClient implements PairRepository {
   final http.Client _inner = http.Client();
-  final url = Uri.https(Settings.baseUrl, "/v0/pairs");
 
   PairClient();
 
@@ -18,9 +17,18 @@ class PairClient extends http.BaseClient implements PairRepository {
 
   @override
   Future<List<PairData>> loadPairs() async {
-    final response = await _inner.get(url);
+    final response = await _inner.get(Uri.https(Settings.baseUrl, "/v0/pairs"));
     return (json.decode(response.body)['data'] as List)
         .map((e) => PairData.fromJson(e))
         .toList();
+  }
+
+  @override
+  Future<PairData> loadPairDetails(
+      String amountAsset, String priceAsset) async {
+    final response = await _inner
+        .get(Uri.https(Settings.baseUrl, "/v0/pairs/$amountAsset/$priceAsset"));
+    final decoded = json.decode(response.body);
+    return PairData.fromJson(decoded);
   }
 }

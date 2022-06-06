@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:market/presentation/home_screen/home_screen.dart';
+import 'package:market/presentation/pairs_screen/pair_detail_screen.dart';
+import 'package:market/presentation/pairs_screen/pairs_screen.dart';
 import 'package:market/presentation/profile_screen/profile_screen.dart';
 import 'package:market/presentation/tab_bar/bottom_nav_bar.dart';
 import 'package:market/redux/actions/actions.dart';
@@ -34,7 +35,7 @@ class MarketApp extends StatelessWidget {
               '/home': (route) => MaterialPage(
                     child: StoreProvider<AppState>(
                       store: store,
-                      child: HomeScreen(onInit: () {
+                      child: PairsScreen(onInit: () {
                         StoreProvider.of<AppState>(context)
                             .dispatch(LoadPairsAction());
                       }),
@@ -43,6 +44,20 @@ class MarketApp extends StatelessWidget {
               '/profile': (route) => const MaterialPage(
                     child: ProfileScreen(),
                   ),
+              '/pair/detail/:amountAsset/:priceAsset': (route) => MaterialPage(
+                      child: StoreProvider<AppState>(
+                    store: store,
+                    child: PairDatailScreen(
+                      amountAsset: route.pathParameters['amountAsset'] ?? "",
+                      priceAsset: route.pathParameters['priceAsset'] ?? "",
+                      onInit: () {
+                        StoreProvider.of<AppState>(context).dispatch(
+                            LoadPairDetailsAction(
+                                route.pathParameters['amountAsset'] ?? "",
+                                route.pathParameters['priceAsset'] ?? ""));
+                      },
+                    ),
+                  )),
             },
           ),
         ),
